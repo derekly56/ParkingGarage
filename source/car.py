@@ -1,35 +1,39 @@
 '''
 Car Class
 ----------
-Will create cars and identify cars by their license plate
+Will create cars and inherit from parent Vehicle class.
 
-Attr: Size (compact, sedan, truck), model/make, license plate, state
+Attr: make, license, state
 '''
 
-class Car:
-	def __init__(self, model, make, size, license, state):
-		self.model = model
-		self.make = make
-		self.size = size
-		self.license = license
-		self.state = state
+from vehicle import Vehicle
 
-	def get_model(self):
-		'''Returns the model of the car'''
-		return self.model
+class Truck(Vehicle):
+	def __init__(self, license):
+		'''Initializes Car class'''
+		super().__init__(license)
+		self.make = 'TRUCK'
 
 	def get_make(self):
 		'''Returns the make of the car'''
 		return self.make
 
-	def get_size(self):
-		'''Returns the size of the car'''
-		return self.size
+class Sedan(Vehicle):
+	def __init__(self, license):
+		'''Initializes Car class'''
+		super().__init__(license)
+		self.make = 'SEDAN'
 
-	def get_license(self):
-		'''Returns the license of the car'''
-		return self.license
+	def get_make(self):
+		'''Returns the make of the car'''
+		return self.make
 
-	def get_state(self):
-		'''Returns the state of the car'''
-		return self.state
+class Compact(Vehicle):
+	def __init__(self, license):
+		'''Initializes Car class'''
+		super().__init__(license)
+		self.make = 'COMPACT'
+
+	def get_make(self):
+		'''Returns the make of the car'''
+		return self.make
