@@ -4,7 +4,7 @@ Car Factory
 This car factory will utilize a factory pattern to generate similar objects
 '''
 
-from car import Compact, Sedan, Truck
+from . car import Compact, Sedan, Truck
 import random
 
 letters = [

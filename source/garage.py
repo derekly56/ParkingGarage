@@ -10,9 +10,9 @@ Compact: 40%, Sedan: 30%, Truck: 20%
 
 import math
 from collections import deque
-from car_spot import Spot
+from . car_spot import Spot
 import time
-from car import Truck, Sedan, Compact
+from . car import Truck, Sedan, Compact
 
 COMPACT_RATIO = 0.4
 SEDAN_RATIO = 0.3
@@ -23,7 +23,7 @@ class Garage:
 		'''Initializes the parking garage and spots allocated for each sizes of vehicles'''
 
 		self.garage = self._init_garage(levels, capacity)
-		self.compact, self.sedan, self.truck = self._init_spots(self.garage, levels, capacity)
+		self.compact, self.sedan, self.truck = self._init_spots(levels, capacity)
 		self.available_spots = capacity * levels
 
 	def _init_garage(self, levels, capacity):
@@ -41,15 +41,15 @@ class Garage:
 
 		garage = []
 
-		x = math.sqrt(capacity)
-		level = [[None] * x for _ in len(x)]
+		x = int(math.sqrt(capacity))
+		level = [[None] * x for _ in range(x)]
 
-		for each_level in levels:
+		for each_level in range(levels):
 			garage.append(level)
 
 		return garage
 
-	def _init_spots(self, garage, levels, capacity):
+	def _init_spots(self, levels, capacity):
 		'''
 		Allocates space for each vehicle sizes in a queue of available coordinates
 
@@ -71,9 +71,9 @@ class Garage:
 		sedan_space = total_capacity * SEDAN_RATIO
 		truck_space = total_capacity * TRUCK_RATIO
 
-		for level in range(len(garage)):
-			for i in range(len(level)):
-				for j in range(len(level[0])):
+		for level in range(len(self.garage)):
+			for i in range(len(self.garage[0])):
+				for j in range(len(self.garage[0][0])):
 					if compact_space > 0:
 						compact_space -= 1
 						compact.append((level, i, j))
@@ -141,6 +141,19 @@ class Garage:
 
 		self.garage[level][row][col] = None
 
+	def clean_up(self):
+		'''Clears all cars with expired time from parking spots'''
+		levels, row, col = len(self.garage), len(self.garage[0]), len(self.garage[0][0])
+
+		for level in range(levels):
+			for r in range(row):
+				for c in range(col):
+					curr_spot = self.garage[level][r][c]
+
+					if curr_spot:
+						if curr_spot.get_time_remaining() <= 0:
+							self.remove_spot(curr_spot)
+
 	def check_space(self, car_type):
 		'''
 		Checks for available space according to car size. Compact cars can fit
@@ -155,23 +168,23 @@ class Garage:
 		'''
 
 		if self.available_spots < 1:
-			return False
+			return False, 0
 		else:
-			if isinstance(car_type, Compact()):
+			if isinstance(car_type, Compact):
 				if len(self.compact) >= 1:
 					return True, 1
 				elif len(self.sedan) >= 1:
 					return True, 2
 				else:
 					return False, 0
-			elif isinstance(car_type, Sedan()):
+			elif isinstance(car_type, Sedan):
 				if len(self.sedan) >= 1:
 					return True, 2
 				elif len(self.truck) >= 1:
 					return True, 3
 				else:
 					return False, 0
-			elif isinstance(car_type, Truck()):
+			elif isinstance(car_type, Truck):
 				if len(self.truck) >= 1:
 					return True, 3
 				else:

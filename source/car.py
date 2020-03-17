@@ -6,7 +6,7 @@ Will create cars and inherit from parent Vehicle class.
 Attr: make, license, state
 '''
 
-from vehicle import Vehicle
+from . vehicle import Vehicle
 
 class Truck(Vehicle):
 	def __init__(self, license):
